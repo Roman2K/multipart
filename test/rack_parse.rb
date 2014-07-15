@@ -11,7 +11,9 @@ class MultipartRackParseTest < MiniTest::Unit::TestCase
 
   def test_nested
     assert_equal({"a" => {"test" => "OK"}}, parse({a: {test: "OK"}}))
+    assert_equal({"a" => {"test1" => {"test2" => "OK"}}}, parse({a: {test1: {test2: "OK"}}}))
     assert_equal({"a" => ["OK"]}, parse({a: ["OK"]}))
+    assert_equal({"a" => {"b" => ["OK"]}}, parse({a: {b: ["OK"]}}))
   end
 
   def test_file
