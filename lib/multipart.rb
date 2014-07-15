@@ -22,11 +22,11 @@ class Multipart
       unless value.respond_to?(:to_str) || value.respond_to?(:each)
         value = value.to_s 
       end
-      chunk = "--#{@boundary}"
-      dispos = ["Content-Disposition: form-data", "name=\"#{key}\""]
-      dispos << "filename=\"#{value.filename}\"" if value.kind_of? File
-      chunk << EOL << dispos.join('; ')
-      chunk << EOL << EOL
+      chunk = "--#{@boundary}" << EOL
+      build_headers(key, value).each do |hkey, hval|
+        chunk << "#{hkey}: #{hval}" << EOL
+      end
+      chunk << EOL
       if value.respond_to? :to_str
         chunk << value << EOL
         yield chunk
@@ -41,6 +41,17 @@ class Multipart
 
   def to_s
     to_a.join
+  end
+
+private
+
+  def build_headers(key, value)
+    {}.tap do |headers|
+      headers.update value.headers if value.kind_of? File
+      dispos = ["form-data", "name=\"#{key}\""]
+      dispos << "filename=\"#{value.filename}\"" if value.kind_of? File
+      headers['Content-Disposition'] = dispos.join('; ')
+    end
   end
 
   class ParamsNormalizer
@@ -79,9 +90,12 @@ class Multipart
   class File
     BUFFER_SIZE = 128 * 1024 * 1024
 
-    def initialize(path)
+    def initialize(path, headers={})
       @path = path
+      @headers = headers
     end
+
+    attr_reader :headers
 
     def filename
       ::File.basename @path

@@ -22,6 +22,13 @@ class MultipartRackParseTest < MiniTest::Unit::TestCase
     assert_equal "test contents\n", result["a"][:tempfile].read
   end
 
+  def test_file_headers
+    file = Multipart::File.new(__dir__ + '/file', 'Content-Type' => 'image/jpeg')
+    result = parse({a: file})
+    assert_equal "file", result["a"][:filename]
+    assert_equal "image/jpeg", result["a"][:type]
+  end
+
   def test_mixed
     result = parse({a: Multipart::File.new(__dir__ + '/file'), b: "OK"})
     assert_equal "file", result["a"][:filename]
