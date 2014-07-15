@@ -48,8 +48,8 @@ private
   def build_headers(key, value)
     {}.tap do |headers|
       headers.update value.headers if value.kind_of? File
-      dispos = ["form-data", "name=\"#{key}\""]
-      dispos << "filename=\"#{value.filename}\"" if value.kind_of? File
+      dispos = [%(form-data), %(name="#{key}")]
+      dispos << %(filename="#{value.filename}") if value.kind_of? File
       headers['Content-Disposition'] = dispos.join('; ')
     end
   end
