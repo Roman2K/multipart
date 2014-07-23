@@ -1,8 +1,8 @@
 # coding: utf-8
 
 Gem::Specification.new do |spec|
-  spec.name     = 'map_photos-multipart'
-  spec.version  = '0.1.0'
+  spec.name     = 'multipart'
+  spec.version  = '0.1.1'
   spec.authors  = ["Roman Le Négrate"]
   spec.email    = ["roman.lenegrate@gmail.com"]
   spec.summary  = "Multipart builder"
