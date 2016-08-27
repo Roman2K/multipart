@@ -68,7 +68,11 @@ private
         when Hash
           value.each do |k,v|
             escaped_key = if key
-              "#{key}[#{URI.encode(k.to_s)}]"
+              if k
+                "#{key}[#{URI.encode(k.to_s)}]"
+              else
+                key
+              end
             else
               URI.encode(k.to_s)
             end

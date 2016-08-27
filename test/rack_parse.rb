@@ -39,6 +39,13 @@ class MultipartRackParseTest < MiniTest::Unit::TestCase
     assert_equal "file", result["b"][:filename]
   end
 
+  def test_nil_key
+    file = Multipart::File.new(__dir__ + '/file')
+    result = parse({a: "OK", b: {nil => file, other: "val_other"}})
+    assert_equal "file", result["b"][:filename]
+    assert_equal "val_other", result["b"]["other"]
+  end
+
 private
 
   def parse(params)
